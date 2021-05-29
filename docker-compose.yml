@@ -1,6 +1,7 @@
 version: '2.3'
 services:
   bot:
+    image: ghcr.io/erisa/highlight
     build: .
     depends_on:
       - postgres
@@ -16,6 +17,11 @@ services:
       - type: bind
         source: ./data
         target: /var/lib/postgresql/data
+      - type: bind
+        source: /etc/passwd
+        target: /etc/passwd
+        read_only: true
+    user: "1002"
     environment:
       - POSTGRES_USER=highlight
       - POSTGRES_PASSWORD=password
