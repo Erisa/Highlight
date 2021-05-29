@@ -1,0 +1,21 @@
+version: '2.3'
+services:
+  bot:
+    build: .
+    depends_on:
+      - postgres
+    restart: always
+    volumes:
+      - type: bind
+        source: ./config.yml
+        target: /usr/src/app/config.yml
+  postgres:
+    image: 'postgres:12-alpine'
+    restart: always
+    volumes:
+      - type: bind
+        source: ./data
+        target: /var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=highlight
+      - POSTGRES_PASSWORD=password
