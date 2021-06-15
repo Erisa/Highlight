@@ -121,8 +121,8 @@ class Highlight(commands.Cog):
     def cog_check(self, ctx):
         return ctx.guild
 
-    @commands.Cog.listener()
-    async def on_message(self, message):
+    @commands.Cog.listener("on_message")
+    async def on_highlight(self, message):
         if not message.guild:
             return
         if message.author.bot:
@@ -141,6 +141,18 @@ class Highlight(commands.Cog):
                 notified_words.append(possible_word)
                 coroutine = self.send_highlight(message, possible_word, match.group(1))
                 self.bot.loop.create_task(coroutine)
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        self.bot.dispatch("user_activity", message.channel, message.author)
+
+    @commands.Cog.listener()
+    async def on_typing(self, channel, user, when):
+        self.bot.dispatch("user_activity", channel, user)
+
+    @commands.Cog.listener()
+    async def on_reaction_add(self, reaction, user):
+        self.bot.dispatch("user_activity", reaction.message.channel, user)
 
     async def send_highlight(self, message, word, text):
         try:
@@ -195,15 +207,13 @@ class Highlight(commands.Cog):
         time = (message.created_at+datetime.timedelta(hours=timezone)).strftime("%H:%M:%S")
         em.description += f"\n> `{time}{utc}` {discord.utils.escape_markdown(str(message.author))}: {content}"
 
-        # Check for anything new to add
-        try:
-            ms = await self.bot.wait_for("message", check=lambda ms: ms.channel == message.channel, timeout=10)
-            if ms.author.id == member.id:
-                return
+        def check(channel, user):
+            return message.channel == channel and user == member
 
-            content = f"{ms.content[:50]}{'...' if len(ms.content) > 50 else ''}"
-            time = (ms.created_at+datetime.timedelta(hours=timezone)).strftime("%H:%M:%S")
-            em.description += f"\n`{time}{utc}` {discord.utils.escape_markdown(str(ms.author))}: {discord.utils.escape_markdown(content)}"
+        # Wait 10 seconds to see if the user is active in the channel
+        try:
+            await self.bot.wait_for("user_activity", check=check, timeout=10)
+            return
         except asyncio.TimeoutError:
             pass
 

@@ -34,7 +34,7 @@ class InvalidOption(Exception):
 
 class HighlightBot(commands.Bot):
     def __init__(self):
-        intents = discord.Intents(guilds=True, messages=True, reactions=True)
+        intents = discord.Intents(guilds=True, messages=True, reactions=True, guild_reactions=True, guild_typing=True)
         super().__init__(command_prefix=commands.when_mentioned, description="I DM you if I find one of your words in the chat", intents=intents)
 
         self.uptime = datetime.datetime.utcnow()
