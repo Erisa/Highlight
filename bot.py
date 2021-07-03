@@ -98,6 +98,11 @@ class HighlightBot(commands.Bot):
         log.info(f"Logged in as {self.user.name} - {self.user.id}")
         self.console = self.get_channel(self.config["console"])
 
+    async def close(self):
+        await super().close()
+        await self.db.close()
+        await self.session.close()
+
     def run(self):
         super().run(self.config["token"])
 

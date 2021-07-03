@@ -198,7 +198,7 @@ class Highlight(commands.Cog):
         except discord.HTTPException:
             pass
 
-        span = re.search(word["word"], message.content.lower()).span()
+        span = re.search(re.escape(word["word"]), message.content.lower()).span()
         content = discord.utils.escape_markdown(message.content[:span[0]])
         content += f"**{discord.utils.escape_markdown(text)}**"
         content += discord.utils.escape_markdown(message.content[span[1]:])
