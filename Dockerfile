@@ -1,11 +1,17 @@
-FROM python:3.9-alpine
+FROM python:3.9-alpine3.13
 
-RUN apk add --no-cache git build-base linux-headers
+RUN apk add --no-cache git build-base linux-headers && \
+    pip install pipenv
 
+RUN adduser -D user
+RUN mkdir -p /usr/src/app && chown user:user /usr/src/app
 WORKDIR /usr/src/app
+USER user
+
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY Pipfile* ./
+RUN  pipenv install --deploy --ignore-pipfile
 
 COPY . .
 
-CMD ["python", "./bot.py"]
+CMD ["pipenv", "run", "bot"]
