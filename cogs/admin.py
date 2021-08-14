@@ -181,7 +181,7 @@ class Admin(commands.Cog):
     @commands.is_owner()
     async def logout(self, ctx):
         await ctx.send(":wave: Logging out")
-        await self.bot.logout()
+        await self.bot.close()
 
     async def get_outdated_packages(self, wait=None):
         installed = [
