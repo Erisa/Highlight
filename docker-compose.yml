@@ -21,7 +21,7 @@ services:
         source: /etc/passwd
         target: /etc/passwd
         read_only: true
-    user: "1002"
+    user: "1000"
     environment:
       - POSTGRES_USER=highlight
       - POSTGRES_PASSWORD=password
