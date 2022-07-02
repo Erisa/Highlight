@@ -1,4 +1,4 @@
-FROM python:3.9-alpine3.13
+FROM python:3.9-alpine3.14
 
 RUN apk add --no-cache git build-base linux-headers && \
     pip install pipenv

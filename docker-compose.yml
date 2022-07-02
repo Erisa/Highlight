@@ -10,6 +10,7 @@ services:
       - type: bind
         source: ./config.yml
         target: /usr/src/app/config.yml
+
   postgres:
     image: 'postgres:12-alpine'
     restart: always
