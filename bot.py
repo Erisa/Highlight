@@ -23,6 +23,12 @@ extensions = [
     "cogs.timers"
 ]
 
+def userStrOverride(self):
+    if self.discriminator == "0":
+        return self.name
+    return f"{self.name}#{self.discriminator}"
+
+discord.User.__str__ = userStrOverride
 
 class OptionMissing(Exception):
     pass
