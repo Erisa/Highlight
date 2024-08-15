@@ -3,7 +3,6 @@ from discord.ext import commands
 from discord.ext import tasks
 
 import asyncio
-import dateparser
 import datetime
 import humanize
 
@@ -44,5 +43,5 @@ class Timers(commands.Cog):
     async def before_loop(self):
         await self.bot.wait_until_ready()
 
-def setup(bot):
-    bot.add_cog(Timers(bot))
+async def setup(bot):
+    await bot.add_cog(Timers(bot))

@@ -25,19 +25,13 @@ class Admin(commands.Cog):
         self.bot = bot
         self.hidden = True
 
-        if self.bot.config["auto-update"]:
-            self.update_packages_loop.start()
-
-    def cog_unload(self):
-        self.update_packages_loop.cancel()
-
     async def cog_check(self, ctx):
         return await self.bot.is_owner(ctx.author)
 
     @commands.command(name="reload", description="Reload an extension")
     async def reload(self, ctx, extension):
         try:
-            self.bot.reload_extension(extension)
+            await self.bot.reload_extension(extension)
             await ctx.send(f":repeat: Reloaded `{extension}`")
         except commands.ExtensionError as exc:
             full = "".join(traceback.format_exception(type(exc), exc, exc.__traceback__, 1))
@@ -46,7 +40,7 @@ class Admin(commands.Cog):
     @commands.command(name="load", description="Load an extension")
     async def load(self, ctx, extension):
         try:
-            self.bot.load_extension(extension)
+            await self.bot.load_extension(extension)
             await ctx.send(f":inbox_tray: Loaded `{extension}`")
         except commands.ExtensionError as exc:
             full = "".join(traceback.format_exception(type(exc), exc, exc.__traceback__, 1))
@@ -55,7 +49,7 @@ class Admin(commands.Cog):
     @commands.command(name="unload", description="Unload an extension")
     async def unload(self, ctx, extension):
         try:
-            self.bot.unload_extension(extension)
+            await self.bot.unload_extension(extension)
             await ctx.send(f":outbox_tray: Unloaded `{extension}`")
         except commands.ExtensionError as exc:
             full = "".join(traceback.format_exception(type(exc), exc, exc.__traceback__, 1))
@@ -108,9 +102,9 @@ class Admin(commands.Cog):
             else:
                 try:
                     try:
-                        self.bot.reload_extension(module)
+                        await self.bot.reload_extension(module)
                     except commands.ExtensionNotLoaded:
-                        self.bot.load_extension(module)
+                        await self.bot.load_extension(module)
                     results.append((True, module))
                 except:
                     results.append((False, module))
@@ -166,7 +160,7 @@ class Admin(commands.Cog):
 
     @commands.command(name="process", description="View system stats", aliases=["system", "health"])
     async def process(self, ctx):
-        em = discord.Embed(title="Process", color=0x96c8da)
+        em = discord.Embed(title="Process", color=discord.Color.blurple())
         em.add_field(name="CPU", value=f"{psutil.cpu_percent()}% used with {formats.plural(psutil.cpu_count()):CPU}")
 
         mem = psutil.virtual_memory()
@@ -183,47 +177,5 @@ class Admin(commands.Cog):
         await ctx.send(":wave: Logging out")
         await self.bot.close()
 
-    async def get_outdated_packages(self, wait=None):
-        installed = [
-            "asyncpg",
-            "dateparser",
-            "discord.py",
-            "humanize",
-            "jishaku",
-            "psutil",
-        ]
-
-        outdated = []
-        for package in installed:
-            try:
-                current_version = pkg_resources.get_distribution(package).version
-                async with self.bot.session.get(f"https://pypi.org/pypi/{package}/json") as resp:
-                    data = await resp.json()
-
-                pypi_version = data["info"]["version"]
-                if current_version != pypi_version:
-                    outdated.append((package, current_version, pypi_version))
-            except Exception as exc:
-                traceback.print_exception(type(exc), exc, exc.__traceback__,file=sys.stderr)
-
-            if wait:
-                await asyncio.sleep(wait)
-
-        return outdated
-
-    @tasks.loop(hours=12)
-    async def update_packages_loop(self):
-        """Automaticly updates packages every 12 hours."""
-
-        process = await asyncio.create_subprocess_shell(f"{sys.executable} -m pip install --upgrade pip -r requirements.txt", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        status = await process.wait()
-
-        if status:
-            log.warning(f"Couldn't automaticly update packages (status code {status})")
-
-    @update_packages_loop.before_loop
-    async def before_update_packages_loop(self):
-        await self.bot.wait_until_ready()
-
-def setup(bot):
-    bot.add_cog(Admin(bot))
+async def setup(bot):
+    await bot.add_cog(Admin(bot))

@@ -7,7 +7,6 @@ word TEXT
 CREATE TABLE IF NOT EXISTS settings (
 user_id BIGINT PRIMARY KEY,
 disabled BOOL,
-timezone INT,
 blocked_users BIGINT ARRAY,
 blocked_channels BIGINT ARRAY
 );

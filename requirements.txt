@@ -3,6 +3,6 @@ dateparser
 discord.py
 humanize
 jishaku
+parsedatetime
 psutil
-pyyaml
 git+https://github.com/Rapptz/discord-ext-menus

@@ -1,8 +1,6 @@
 # Highlight
 
-A Discord bot that notifies you when a configured word is sent in a channel.
-
-If you have questions or issues, feel free to join the [support server](https://discord.gg/eHxvStNJb7) on Discord.
+A Discord bot that notifies you when a configured word is sent in a channel. I'm done maintaing this bot for now.
 
 ## Features
 
@@ -15,3 +13,7 @@ If you have questions or issues, feel free to join the [support server](https://
 ## Documentation
 
 You can find information on setting up and using the bot [here](https://ilovetocode2019.com/Highlight).
+
+## Terms of Service and Privacy Policy
+
+There isn't really anything worth mentioning. No personal information is stored.

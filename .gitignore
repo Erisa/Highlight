@@ -2,3 +2,4 @@
 *.yml
 data/*
 !docker-compose.yml
+config.py
