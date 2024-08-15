@@ -43,7 +43,6 @@ class HighlightBot(commands.Bot):
         super().__init__(command_prefix=commands.when_mentioned, description="I DM you if I find one of your words in the chat", intents=intents, allowed_mentions=allowed_mentions, case_insensitive=True)
 
         self.uptime = datetime.datetime.utcnow()
-        self.support_server_invite = "https://discord.gg/XkWXRJ9fMv"
 
         self.status_webhook = None
         self.console = None

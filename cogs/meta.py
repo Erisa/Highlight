@@ -13,7 +13,7 @@ class HighlightHelpCommand(commands.HelpCommand):
         ctx = self.context
         bot = ctx.bot
 
-        em = discord.Embed(title=f"{bot.user.name} Help", description=f"{bot.description}. If you need more help you can join the [support server]({bot.support_server_invite}).\n\n", color=discord.Color.blurple())
+        em = discord.Embed(title=f"{bot.user.name} Help", description=f"{bot.description}.\n\n", color=discord.Color.blurple())
         em.set_thumbnail(url=bot.user.display_avatar.url)
 
         commands = await self.filter_commands(bot.commands)
@@ -37,8 +37,6 @@ class HighlightHelpCommand(commands.HelpCommand):
         if command.aliases:
             em.description += f"\nAliases: {', '.join(command.aliases)}"
 
-        em.description += self.bottom_text.format(bot.support_server_invite)
-
         await ctx.send(embed=em)
 
     async def send_group_help(self, group):
@@ -58,8 +56,6 @@ class HighlightHelpCommand(commands.HelpCommand):
 
         for command in commands:
             em.description += f"\n`{self.get_command_signature(command).strip()}` {f'- {command.description}' if command.description else ''}\n"
-
-        em.description += self.bottom_text.format(bot.support_server_invite)
 
         await ctx.send(embed=em)
 
@@ -98,7 +94,7 @@ class Meta(commands.Cog):
         if isinstance(error, commands.CommandInvokeError):
             em = discord.Embed(
                 title=":warning: Error",
-                description=f"An unexpected error has occured. If you're confused or think this is a bug you can join the [support server]({self.bot.support_server_invite}). \n```py\n{error}```",
+                description=f"An unexpected error has occured. \n```py\n{error}```",
                 color=discord.Color.gold()
             )
             em.set_footer(text=self.bot.user.name, icon_url=self.bot.user.display_avatar.url)
