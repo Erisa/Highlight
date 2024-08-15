@@ -10,8 +10,9 @@ dateparser = "~=1.0.0"
 humanize = "~=3.11.0"
 jishaku = "~=2.5.0"
 psutil = "~=5.9.1"
-pyyaml = "~=5.4.1"
+pyyaml = "~=6.0.2"
 discord-ext-menus = {git = "https://github.com/Rapptz/discord-ext-menus", editable = true, ref = "master"}
+parsedatetime = "*"
 
 [dev-packages]
 
