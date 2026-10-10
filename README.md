@@ -16,4 +16,4 @@ You can find information on setting up and using the bot [here](https://ilovetoc
 
 ## Terms of Service and Privacy Policy
 
-There isn't really anything worth mentioning. No personal information is stored.
+See [PRIVACY.md](/PRIVACY.md)
